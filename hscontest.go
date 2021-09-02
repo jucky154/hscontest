@@ -7,7 +7,6 @@ package main
 import (
 	_ "embed"
 	"strings"
-	"github.com/nextzlog/zylo"
 )
 
 var (
@@ -16,42 +15,47 @@ var (
 
 
 //go:embed hs.dat
-var hslist string
+var cityMultiList string
 
-func zcities() string {
-	return hslist
+func init() {
+	CityMultiList = cityMultiList
+	OnLaunchEvent = onLaunchEvent
+	OnFinishEvent = onFinishEvent
+	OnAttachEvent = onAttachEvent
+	OnInsertEvent = onInsertEvent
+	OnDeleteEvent = onDeleteEvent
+	OnVerifyEvent = onVerifyEvent
+	OnPointsEvent = onPointsEvent
 }
 
 
-func zlaunch() {
-	zylo.Notify("CQ!")
+func onLaunchEvent() {
+	DisplayToast("CQ!")
 }
 
-func zfinish() {
-	zylo.Notify("Bye")
+func onFinishEvent() {
+	DisplayToast("Bye")
 }
 
-func zattach(test string, path string) {
+func onAttachEvent(test string, path string) {
+	DisplayToast(test)
 	hsmults=0
 }
 
-func zdetach() {
-	hsmults=0
-}
 
-func zinsert(qso *zylo.QSO) {
+func onInsertEvent(qso *QSO) {
 	if qso.GetMul2() == "HS" {
 		hsmults = hsmults +1 
 	}	
 }
 
-func zdelete(qso *zylo.QSO) {
+func  onDeleteEvent(qso *QSO) {
 	if qso.GetMul2() == "HS" {
 		hsmults = hsmults -1 
 	}
 }
 
-func zverify(qso *zylo.QSO) {
+func onVerifyEvent(qso *QSO) {
 	//multi
 	rcvd := strings.TrimSpace(qso.GetRcvd())
 	if rcvd != "" {
@@ -81,16 +85,6 @@ func zverify(qso *zylo.QSO) {
 	}
 }
 
-func zpoints(score, mults int) int {
+func onPointsEvent(score, mults int) int {
 	return score * (mults + hsmults)
 }
-
-func zeditor(key int, name string) bool {
-	return	false
-}
-
-func zbutton(btn int, name string) bool {
-	return false
-}
-
-func main() {}
