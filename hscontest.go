@@ -7,6 +7,7 @@ package main
 import (
 	_ "embed"
 	"strings"
+	"os"
 )
 
 var (
@@ -21,6 +22,7 @@ func init() {
 	CityMultiList = cityMultiList
 	OnLaunchEvent = onLaunchEvent
 	OnFinishEvent = onFinishEvent
+	OnAssignEvent = onAssignEvent
 	OnAttachEvent = onAttachEvent
 	OnInsertEvent = onInsertEvent
 	OnDeleteEvent = onDeleteEvent
@@ -31,15 +33,28 @@ func init() {
 
 func onLaunchEvent() {
 	DisplayToast("CQ!")
+	hsmults = 0
 }
 
 func onFinishEvent() {
 	DisplayToast("Bye")
+	hsmults = 0
 }
 
 func onAttachEvent(test string, path string) {
 	DisplayToast(test)
-	hsmults=0
+}
+
+func onAssignEvent(contest, configs string) {
+	binary_data, err := os.ReadFile(Query("{F}"))
+	if err == nil {
+		initial_qsos := LoadZLO(binary_data)
+		for _,qso_data := range initial_qsos{
+			if qso_data.GetMul2() == "HS"{
+				hsmults = hsmults +1
+			}
+		}		
+	}
 }
 
 
