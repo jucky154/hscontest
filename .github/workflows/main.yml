@@ -26,7 +26,7 @@ jobs:
           args: --lzma -fq
       - uses: svenstaro/upload-release-action@v2
         with:
-          tag: nightly
+          tag: nightly2
           file: hscontest.dll
           overwrite: true
           file_glob: true
